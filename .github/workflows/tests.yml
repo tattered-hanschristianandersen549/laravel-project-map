@@ -1,0 +1,60 @@
+name: Tests
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: "8.2"
+            laravel: "^11.0"
+          - php: "8.3"
+            laravel: "^11.0"
+          - php: "8.4"
+            laravel: "^11.0"
+
+          - php: "8.2"
+            laravel: "^12.0"
+          - php: "8.3"
+            laravel: "^12.0"
+          - php: "8.4"
+            laravel: "^12.0"
+
+          - php: "8.3"
+            laravel: "^13.0"
+          - php: "8.4"
+            laravel: "^13.0"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Remove lock file for matrix resolution
+        run: rm -f composer.lock
+
+      - name: Install matrix dependencies
+        run: |
+          composer require "illuminate/support:${{ matrix.laravel }}" --dev --no-interaction --no-update
+          composer update --prefer-dist --no-interaction --with-all-dependencies
+
+      - name: Run test suite
+        run: vendor/bin/pest
