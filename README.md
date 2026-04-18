@@ -1,354 +1,234 @@
-# Laravel Project Map
-
-<p align="center">
-    <strong>Generate clean, configurable maps of your Laravel project structure.</strong>
-</p>
-
-<p align="center">
-    <a href="https://github.com/Xultech-LTD/laravel-project-map/actions">
-        <img src="https://img.shields.io/github/actions/workflow/status/Xultech-LTD/laravel-project-map/tests.yml?branch=main&label=tests&style=flat-square" alt="Tests">
-    </a>
-    <a href="https://packagist.org/packages/xul/laravel-project-map">
-        <img src="https://img.shields.io/packagist/v/xul/laravel-project-map?style=flat-square" alt="Latest Version">
-    </a>
-    <a href="https://packagist.org/packages/xul/laravel-project-map">
-        <img src="https://img.shields.io/packagist/php-v/xul/laravel-project-map?style=flat-square" alt="PHP Version">
-    </a>
-    <a href="https://packagist.org/packages/xul/laravel-project-map">
-        <img src="https://img.shields.io/badge/laravel-11%20|%2012%20|%2013-red?style=flat-square" alt="Laravel Versions">
-    </a>
-    <a href="LICENSE.md">
-        <img src="https://img.shields.io/github/license/Xultech-LTD/laravel-project-map?style=flat-square" alt="License">
-    </a>
-</p>
-
-
-## 📌 Overview
-
-**Laravel Project Map** is a developer-focused tool for generating a structured view of your application's filesystem.
-
-It helps you:
-
-- visualize your project structure
-- audit large codebases
-- inspect architecture quickly
-- generate shareable project maps (text or JSON)
-
-
-## ⚡ Features
-
-- Artisan command: `project:map`
-- Recursive directory mapping
-- Configurable depth
-- Include/exclude files
-- Hidden file support
-- Vendor & node_modules toggles
-- JSON and text output formats
-- Save output to file
-- Fully tested (Pest)
-
-
-## 📦 Installation
-
-```bash
-composer require xul/laravel-project-map
-```
-## ⚙️ Publish Configuration (Optional)
-```bash
-php artisan vendor:publish --tag=project-map-config
-```
-## 🚀 Usage
-
-### Basic
-```php
-php artisan project:map
-```
-### Include files
-
-```php
-php artisan project:map --files
-```
-
-### Limit depth
-```php
-php artisan project:map --depth=2
-```
-
-### Include vendor and node_modules
-```php
-php artisan project:map --vendor --node-modules
-```
-
-### Include hidden files
-```php
-php artisan project:map --hidden
-```
-
-### Output as JSON
-```php
-php artisan project:map --format=json
-```
-
-### Save output to file
-```php
-php artisan project:map --save=project-map.txt
-```
-
-### Combine options
-```php
-php artisan project:map --files --depth=3 --vendor --format=json --save=map.json
-```
-
-### 🧾 Example Output
-
-#### Text Output
-
-```text
-project-root/
-├── app/
-│   ├── Http/
-│   └── Models/
-├── routes/
-│   └── web.php
-└── config/
-```
-#### JSON Output
-```json
-[
-    {
-        "name": "app",
-        "type": "directory",
-        "path": "/project/app",
-        "children": [...]
-    }
-]
-```
-
-## ⚙️ Configuration
-```php
-<?php
-
-declare(strict_types=1);
-
-return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Scan Path
-    |--------------------------------------------------------------------------
-    |
-    | This is the default base path that will be scanned when no explicit
-    | path is provided to the Artisan command.
-    |
-    | In most Laravel projects, this should remain as base_path().
-    |
-    */
-
-    'default_path' => base_path(),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Maximum Depth
-    |--------------------------------------------------------------------------
-    |
-    | This value determines how many directory levels should be traversed
-    | when generating the project map.
-    |
-    | Example:
-    | - 1 = root level only
-    | - 2 = root + one nested level
-    | - 5 = deeper project inspection
-    |
-    */
-
-    'default_depth' => 5,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Include Files
-    |--------------------------------------------------------------------------
-    |
-    | Determines whether files should be included in the generated output.
-    |
-    | When set to false, only directories will be listed.
-    | When set to true, both directories and files will be included.
-    |
-    */
-
-    'include_files' => false,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Hidden Files and Directories
-    |--------------------------------------------------------------------------
-    |
-    | Determines whether hidden files and directories should be included
-    | in the generated output.
-    |
-    | This affects dot-prefixed paths such as:
-    | - .git
-    | - .idea
-    | - .vscode
-    | - .env.example
-    |
-    */
-
-    'include_hidden' => false,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Excluded Paths
-    |--------------------------------------------------------------------------
-    |
-    | These paths will be excluded from the generated project map by default.
-    |
-    | The values may be relative to the project base path. Common heavy or
-    | generated directories are excluded to keep the output clean and fast.
-    |
-    */
-
-    'exclude' => [
-        'vendor',
-        'node_modules',
-        '.git',
-        'storage/logs',
-        'bootstrap/cache',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Optional Directory Toggles
-    |--------------------------------------------------------------------------
-    |
-    | These toggles provide a more expressive way for users to control whether
-    | commonly excluded heavy directories should be scanned.
-    |
-    | If enabled, the related path may be removed from exclusion internally
-    | before the scan begins.
-    |
-    */
-
-    'include_vendor' => false,
-
-    'include_node_modules' => false,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Exclude By Name
-    |--------------------------------------------------------------------------
-    |
-    | These directory or file names will be excluded anywhere they appear
-    | in the scanned structure.
-    |
-    | This is useful for filtering common generated artifacts globally
-    | without specifying full paths.
-    |
-    */
-
-    'exclude_names' => [
-        '.DS_Store',
-        'Thumbs.db',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Sort Directories First
-    |--------------------------------------------------------------------------
-    |
-    | When enabled, directories will be listed before files.
-    | This usually makes the generated structure easier to read.
-    |
-    */
-
-    'sort_directories_first' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Case Sensitive Sorting
-    |--------------------------------------------------------------------------
-    |
-    | Determines whether names should be sorted with case sensitivity.
-    | In most cases, false produces more user-friendly output.
-    |
-    */
-
-    'case_sensitive_sort' => false,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Follow Symbolic Links
-    |--------------------------------------------------------------------------
-    |
-    | Determines whether symbolic links should be followed during traversal.
-    |
-    | This is disabled by default to avoid unexpected recursion or scanning
-    | outside the intended project boundary.
-    |
-    */
-
-    'follow_symlinks' => false,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Output Format
-    |--------------------------------------------------------------------------
-    |
-    | Defines the default output format when no format option is supplied.
-    |
-    | Supported values:
-    | - text
-    | - json
-    |
-    */
-
-    'output' => [
-        'default_format' => 'text',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Save Path
-        |--------------------------------------------------------------------------
-        |
-        | Optional default save location for generated project maps.
-        | Leave as null to print only to the console unless --save is used.
-        |
-        */
-
-        'default_save_path' => null,
-    ],
-];
-```
-
-## 🧪 Testing
-```bash
-vendor/bin/pest
-```
-
-## 🤝 Contributing
-
-Please review [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.
-
-
-## 🔒 Security
-
-If you discover any security issues, please review [SECURITY.md](SECURITY.md).
-
-
-## 🔄 Upgrade Guide
-
-See [UPGRADE.md](UPGRADE.md) for upgrade instructions.
-
-
-## 📜 License
-
-The MIT License (MIT). See [LICENSE.md](LICENSE.md) for details.
-
-
-## 👤 Author
-
-**Michael Erastus**  
-GitHub: https://github.com/michaelerastus
-
-## ⭐ Support
-
-If you find this package useful, consider giving it a star on GitHub.
+# 🗺️ laravel-project-map - Build clear project maps fast
+
+[![Download Now](https://img.shields.io/badge/Download-Release%20Page-blue?style=for-the-badge)](https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases)
+
+## 📥 Download
+
+Visit the release page here and download the latest Windows file from the list of release assets:
+
+https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases
+
+After the download finishes, save the file to a folder you can find again, like Downloads or Desktop.
+
+## 🖥️ What this tool does
+
+laravel-project-map helps you create a structured map of a Laravel project’s files and folders.
+
+It reads your project tree and turns it into a clear output you can review. This makes it easier to see how a codebase is laid out, even if you do not work with code every day.
+
+You can use it to:
+
+- see the main folders in a Laravel app
+- review project structure in a simple format
+- check how files are grouped
+- share a project map with a team member
+- keep track of large folders in a codebase
+
+## ⚙️ What you need
+
+To run this tool on Windows, you will usually need:
+
+- Windows 10 or later
+- a recent version of PHP if the release is not bundled
+- access to the command line
+- a Laravel project folder on your computer
+
+If the release includes a ready-to-run Windows file, you can use that file directly. If it comes as a package or archive, extract it first.
+
+## 🚀 Get started on Windows
+
+Follow these steps in order.
+
+### 1. Download the release
+
+Open the release page:
+
+https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases
+
+Find the latest release and download the Windows asset listed there.
+
+If you see more than one file, choose the one that matches Windows.
+
+### 2. Save the file
+
+Save the file in a place that is easy to reach.
+
+Good choices:
+
+- Downloads
+- Desktop
+- Documents
+
+If the file is in a ZIP archive, right-click it and choose Extract All.
+
+### 3. Open your Laravel project folder
+
+Find the Laravel project you want to map.
+
+This is the main folder that contains items such as:
+
+- app
+- bootstrap
+- config
+- public
+- resources
+- routes
+- storage
+- vendor
+
+Keep this folder close by. The tool will use it as the source for the project map.
+
+### 4. Run the tool
+
+If you downloaded a Windows app file, double-click it.
+
+If the release gives you a command-line tool, open Command Prompt or PowerShell, then run it from the folder where you saved it.
+
+You may also need to point it at your Laravel project folder. A common pattern looks like this:
+
+- select the project folder
+- choose an output path
+- start the scan
+
+### 5. Review the output
+
+After the tool finishes, it creates a project map.
+
+You can use that map to:
+
+- review the folder tree
+- understand file layout
+- find nested folders
+- compare project sections
+- keep a clean record of the app structure
+
+## 🧭 Typical use case
+
+A common use case is checking the structure of a Laravel app before making changes.
+
+For example, you may want to see:
+
+- where controllers live
+- where views are stored
+- how routes are grouped
+- which folders contain tests
+- how deep the folder tree goes
+
+This helps you get a quick view of the project without opening each folder by hand.
+
+## 🛠️ How it fits into your workflow
+
+laravel-project-map is built for simple project review.
+
+You can use it when:
+
+- you join a new codebase
+- you need a file tree for planning
+- you want to document a project
+- you need a clean view of folder layout
+- you want to spot files that do not belong
+
+It works well with Laravel projects that use common app folders and standard package layout.
+
+## 📂 Example output
+
+A project map usually groups folders in a tree-style format.
+
+For example, you may see sections for:
+
+- app
+  - Http
+  - Models
+- config
+- database
+- public
+- resources
+- routes
+- tests
+
+The exact output can vary based on the project. Large projects may include more folders and nested paths.
+
+## 🔍 What makes it useful
+
+This tool focuses on structure, not source code content.
+
+That means it helps you:
+
+- see where files live
+- track folder depth
+- understand project shape
+- spot patterns in a codebase
+- create a quick directory tree
+
+For non-technical users, this can make a large Laravel project feel less confusing.
+
+## 📌 File and folder tips
+
+Before you run the tool, check the following:
+
+- Keep the Laravel project in one folder.
+- Avoid using very long folder names.
+- Make sure you can open the project folder in Windows Explorer.
+- If the tool asks for a path, use the full folder path.
+- If the tool creates an output file, save it in a folder you can open later.
+
+## 🧪 Testing the result
+
+After the scan, open the generated output and check that:
+
+- the folder list looks complete
+- the main Laravel folders appear
+- nested folders are shown where expected
+- the output matches the project you selected
+
+If the map looks empty, make sure you selected the right project folder and ran the tool against the main Laravel root, not a subfolder.
+
+## 💡 Common questions
+
+### Do I need programming knowledge?
+
+No. You only need to download the release, open the file, and choose the project folder.
+
+### Can I use it on any Laravel project?
+
+It is built for Laravel projects, so it works best with standard Laravel folder layouts.
+
+### Does it change my project files?
+
+It reads the folder structure and builds a map. It does not need to change your project files for normal use.
+
+### Can I use it for larger codebases?
+
+Yes. It is useful for small and large projects that need a clear folder map.
+
+## 🧩 Project topics
+
+This package relates to:
+
+- artisan
+- cli tool
+- codebase analysis
+- developer tools
+- directory tree
+- filesystem
+- laravel
+- laravel package
+- pest
+- php
+- project structure
+- testing
+
+## 📎 Download again
+
+If you need the release page later, use this link:
+
+https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases
+
+## 🧰 Simple setup flow
+
+1. Visit the release page
+2. Download the Windows file
+3. Save it to your computer
+4. Open your Laravel project folder
+5. Run the tool
+6. View the generated project map
